@@ -408,10 +408,17 @@ body {
     gap: 0.5rem;
 }
 
-.score-blocks {
-    font-size: 1.25rem;
-    line-height: 1;
-}
+    .score-blocks {
+        font-size: 1.25rem;
+        line-height: 1;
+    }
+
+    /* Mobile: reduce historical score block size */
+    @media (max-width: 768px) {
+        .previous-score .score-blocks {
+            font-size: 0.625rem; /* Half of 1.25rem */
+        }
+    }
 
 .level-text {
     font-weight: 600;
@@ -641,7 +648,68 @@ body {
     }
 
     .setting-slider {
-        min-height: 44px; /* Ensure touch targets are accessible */
+        position: relative;
+        width: 100%;
+        height: 24px;
+        background:rgba(247, 247, 247, 0.54);
+        border-radius: 12px;
+        outline: none;
+        -webkit-appearance: none;
+        appearance: none;
+        cursor: pointer;
+        border: none;
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .setting-slider::-webkit-slider-track {
+        background: transparent;
+        border: none;
+        height: 24px;
+        border-radius: 12px;
+    }
+
+    .setting-slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: #3b82f6;
+        cursor: pointer;
+        border: 2px solid #ffffff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        position: relative;
+        z-index: 2;
+    }
+
+    .setting-slider::-webkit-slider-thumb:hover {
+        background: #2563eb;
+    }
+
+    .setting-slider::-webkit-slider-thumb:active {
+        transform: scale(1.1);
+    }
+
+    /* Firefox support */
+    .setting-slider::-moz-range-track {
+        background: transparent;
+        border: none;
+        height: 24px;
+        border-radius: 12px;
+    }
+
+    .setting-slider::-moz-range-thumb {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: #3b82f6;
+        cursor: pointer;
+        border: 2px solid #ffffff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .setting-slider::-moz-range-thumb:hover {
+        background: #2563eb;
     }
 
     .scores-section {
