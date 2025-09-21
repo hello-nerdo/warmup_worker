@@ -1,0 +1,13 @@
+{
+  "name": "warmup-worker",
+  "version": "1.0.0",
+  "description": "A simple mental math game as a Cloudflare Worker",
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "wrangler": "^4.38.0"
+  }
+}
