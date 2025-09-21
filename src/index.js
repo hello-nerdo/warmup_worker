@@ -1090,17 +1090,19 @@ function startTimer() {
                 gameState.settings = generateSettings(gameState.scores.previousScores.length);
             }
 
+            // Update UI immediately after handling timeout
+            updateUI();
+            // Clear any pending input in persistent input to prevent stale input and refocus
+            if (isMobileDevice && persistentInput) {
+                persistentInput.value = '';
+                if (gameState.isRunning) {
+                    focusPersistentInput();
+                }
+            }
+
             clearTimer();
             if (gameState.isRunning) {
                 startTimer();
-            }
-        }
-        // Only update UI when timer expires, not every tick
-        if (gameState.currentTimeRemaining <= 0) {
-            updateUI();
-            // Ensure persistent input stays focused on mobile after timer expires
-            if (isMobileDevice && gameState.isRunning) {
-                focusPersistentInput();
             }
         }
     }, 200);
