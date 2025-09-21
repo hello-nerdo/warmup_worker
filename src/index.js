@@ -49,21 +49,6 @@ function getHTML() {
         <div class="game-section">
             <div class="settings-panel">
                 <div class="setting-group">
-                    <label for="difficulty" class="setting-label">Amount:</label>
-                    <span class="setting-desc">
-                        Select a level from 1 to 9; this determines the number to add or subtract from each integer.
-                    </span>
-                    <input
-                        id="difficulty"
-                        type="number"
-                        min="1"
-                        max="9"
-                        value="1"
-                        class="setting-input"
-                    />
-                </div>
-
-                <div class="setting-group">
                     <label class="setting-label">Operation:</label>
                     <div class="operation-buttons">
                         <button id="subtract-btn" class="operation-btn active">Subtract</button>
@@ -72,16 +57,67 @@ function getHTML() {
                 </div>
 
                 <div class="setting-group">
-                    <label for="timeLimit" class="setting-label">Time Limit (seconds):</label>
+                    <label for="difficulty" class="setting-label">Difficulty: <span id="difficulty-value" class="slider-value">1</span></label>
                     <input
-                        id="timeLimit"
-                        type="number"
-                        min="1"
-                        max="10"
-                        step="0.5"
-                        value="8"
-                        class="setting-input"
+                        id="difficulty"
+                        type="range"
+                        min="0"
+                        max="9"
+                        value="1"
+                        class="setting-slider"
                     />
+                </div>
+
+                <div class="setting-group">
+                    <button id="advanced-toggle" class="advanced-toggle">Advanced Settings ▼</button>
+                </div>
+
+                <div id="advanced-settings" class="advanced-settings" style="display: none;">
+                    <div class="setting-group">
+                        <label class="setting-label">Rotation:</label>
+                        <span class="setting-desc">
+                            Choose whether to flip between operators or stick to one throughout the game.
+                        </span>
+                        <div class="operation-buttons">
+                            <button id="flip-btn" class="operation-btn active">Flip</button>
+                            <button id="stick-btn" class="operation-btn">Stick</button>
+                        </div>
+                    </div>
+
+                    <div class="setting-group progression-group">
+                        <label class="setting-label">Progression:</label>
+                        <span class="setting-desc">
+                            Choose whether difficulty stays the same or increases each level.
+                        </span>
+                        <div class="operation-buttons">
+                            <button id="static-btn" class="operation-btn">Static</button>
+                            <button id="step-btn" class="operation-btn active">Step</button>
+                        </div>
+                        <div id="step-controls" class="step-controls" style="display: none;">
+                            <label for="progression-step" class="setting-label">Step Size: <span id="progression-step-value" class="slider-value">1</span></label>
+                            <input
+                                id="progression-step"
+                                type="range"
+                                min="1"
+                                max="9"
+                                value="1"
+                                class="setting-slider"
+                            />
+                        </div>
+                    </div>
+
+                    <div class="setting-group">
+                        <label for="timeLimit" class="setting-label">Time Limit: <span id="timeLimit-value" class="slider-value">8</span> seconds</label>
+                        <input
+                            id="timeLimit"
+                            type="range"
+                            min="1"
+                            max="10"
+                            step="0.5"
+                            value="8"
+                            class="setting-slider"
+                        />
+                    </div>
                 </div>
             </div>
 
@@ -198,9 +234,101 @@ body {
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
+.setting-slider {
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    background: #e5e7eb;
+    outline: none;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.setting-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #3b82f6;
+    cursor: pointer;
+    border: 2px solid #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.setting-slider::-webkit-slider-thumb:hover {
+    background: #2563eb;
+}
+
+.setting-slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #3b82f6;
+    cursor: pointer;
+    border: 2px solid #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.setting-slider::-moz-range-thumb:hover {
+    background: #2563eb;
+}
+
+.slider-value {
+    font-weight: 600;
+    color: #3b82f6;
+}
+
 .operation-buttons {
     display: flex;
     gap: 0.5rem;
+}
+
+.step-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+    padding: 0.75rem;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.375rem;
+    border-left: 3px solid #3b82f6;
+}
+
+.advanced-toggle {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: #f3f4f6;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #374151;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+}
+
+.advanced-toggle:hover {
+    background: #e5e7eb;
+    border-color: #9ca3af;
+}
+
+.advanced-toggle.expanded {
+    background: #dbeafe;
+    border-color: #3b82f6;
+    color: #1e40af;
+}
+
+.advanced-settings {
+    margin-top: 0.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e5e7eb;
+}
+
+.advanced-settings .setting-group:not(:first-child) {
+    margin-top: 1.5rem;
 }
 
 .operation-btn {
@@ -251,6 +379,7 @@ body {
     font-weight: 700;
     font-size: 1.25rem;
     color: #1f2937;
+    line-height: 1;
 }
 
 .previous-scores {
@@ -263,12 +392,33 @@ body {
 
 .previous-score {
     display: flex;
+    flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    gap: 0.5rem;
     background: #f9fafb;
     padding: 0.75rem;
     border-radius: 0.375rem;
     font-size: 0.875rem;
+}
+
+.level-score-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.score-blocks {
+    font-size: 1.25rem;
+    line-height: 1;
+}
+
+.level-text {
+    font-weight: 600;
+    color: #374151;
+    font-size: 0.875rem;
+    white-space: nowrap;
+    font-family: 'Courier New', monospace;
 }
 
 .previous-score-badges {
@@ -490,6 +640,10 @@ body {
         font-size: 1rem; /* Prevent zoom on iOS */
     }
 
+    .setting-slider {
+        min-height: 44px; /* Ensure touch targets are accessible */
+    }
+
     .scores-section {
         gap: 0.75rem;
     }
@@ -593,6 +747,18 @@ body {
         font-size: 0.8rem;
     }
 
+    .level-score-container {
+        gap: 0.25rem;
+    }
+
+    .score-blocks {
+        font-size: 1rem;
+    }
+
+    .level-text {
+        font-size: 0.8rem;
+    }
+
     .previous-score-badges {
         gap: 0.25rem;
     }
@@ -678,6 +844,9 @@ let gameState = {
     settings: {
         difficulty: 1,
         operation: 'subtract',
+        operatorRotation: 'flip',
+        difficultyProgression: 'step',
+        progressionStep: 1,
         timeLimit: 8
     },
     isRunning: false,
@@ -687,9 +856,20 @@ let gameState = {
 
 // DOM elements
 const difficultyInput = document.getElementById('difficulty');
+const difficultyValueEl = document.getElementById('difficulty-value');
 const subtractBtn = document.getElementById('subtract-btn');
 const addBtn = document.getElementById('add-btn');
+const flipBtn = document.getElementById('flip-btn');
+const stickBtn = document.getElementById('stick-btn');
+const staticBtn = document.getElementById('static-btn');
+const stepBtn = document.getElementById('step-btn');
+const progressionStepInput = document.getElementById('progression-step');
+const progressionStepValueEl = document.getElementById('progression-step-value');
+const stepControls = document.getElementById('step-controls');
+const advancedToggle = document.getElementById('advanced-toggle');
+const advancedSettings = document.getElementById('advanced-settings');
 const timeLimitInput = document.getElementById('timeLimit');
+const timeLimitValueEl = document.getElementById('timeLimit-value');
 const currentScoreEl = document.getElementById('current-score');
 const currentTaskEl = document.getElementById('current-task');
 const previousScoresEl = document.getElementById('previous-scores');
@@ -816,9 +996,32 @@ function generateInitialLevel() {
 
 function generateSettings(numCompletedLevels = 0, currentSettings = null) {
     const baseTimeLimit = currentSettings ? currentSettings.timeLimit : 8;
+    const operatorRotation = currentSettings ? currentSettings.operatorRotation : 'flip';
+    const difficultyProgression = currentSettings ? currentSettings.difficultyProgression : 'static';
+    const progressionStep = currentSettings ? currentSettings.progressionStep : 1;
+    const baseOperation = currentSettings ? currentSettings.operation : 'subtract';
+    const baseDifficulty = currentSettings ? currentSettings.difficulty : 1;
+
+    let operation;
+    if (operatorRotation === 'flip') {
+        operation = numCompletedLevels % 2 === 0 ? 'subtract' : 'add';
+    } else { // 'stick'
+        operation = baseOperation;
+    }
+
+    let difficulty;
+    if (difficultyProgression === 'static') {
+        difficulty = baseDifficulty;
+    } else { // 'step'
+        difficulty = normalizeAnswer(baseDifficulty + (numCompletedLevels * progressionStep));
+    }
+
     return {
-        difficulty: normalizeAnswer(1 + Math.floor(numCompletedLevels / 2)),
-        operation: numCompletedLevels % 2 === 0 ? 'subtract' : 'add',
+        difficulty: difficulty,
+        operation: operation,
+        operatorRotation: operatorRotation,
+        difficultyProgression: difficultyProgression,
+        progressionStep: progressionStep,
         timeLimit: Math.max(baseTimeLimit - numCompletedLevels * 0.2, 2)
     };
 }
@@ -836,6 +1039,18 @@ function initializeGame() {
     gameState.isRunning = false;
     gameState.currentTimeRemaining = gameState.settings.timeLimit;
     updateUI();
+}
+
+// Helper function to render score as colored blocks
+function renderScoreBlocks(score, total = 10, showRemainingAsGray = false) {
+    const greenBlocks = '🟩'.repeat(score);
+    if (showRemainingAsGray) {
+        const grayBlocks = '░'.repeat(total - score);
+        return greenBlocks + grayBlocks;
+    } else {
+        const redBlocks = '🟥'.repeat(total - score);
+        return greenBlocks + redBlocks;
+    }
 }
 
 function updateUI() {
@@ -856,14 +1071,29 @@ function updateUI() {
 
     // Update settings
     difficultyInput.value = gameState.settings.difficulty;
+    difficultyValueEl.textContent = gameState.settings.difficulty;
     timeLimitInput.value = gameState.settings.timeLimit;
+    timeLimitValueEl.textContent = gameState.settings.timeLimit.toFixed(1);
 
     // Update operation buttons
     subtractBtn.classList.toggle('active', gameState.settings.operation === 'subtract');
     addBtn.classList.toggle('active', gameState.settings.operation === 'add');
 
+    // Update rotation buttons
+    flipBtn.classList.toggle('active', gameState.settings.operatorRotation === 'flip');
+    stickBtn.classList.toggle('active', gameState.settings.operatorRotation === 'stick');
+
+    // Update progression buttons
+    staticBtn.classList.toggle('active', gameState.settings.difficultyProgression === 'static');
+    stepBtn.classList.toggle('active', gameState.settings.difficultyProgression === 'step');
+
+    // Update progression step controls
+    stepControls.style.display = gameState.settings.difficultyProgression === 'step' ? 'block' : 'none';
+    progressionStepInput.value = gameState.settings.progressionStep;
+    progressionStepValueEl.textContent = gameState.settings.progressionStep;
+
     // Update scores
-    currentScoreEl.textContent = gameState.scores.currentScore;
+    currentScoreEl.innerHTML = renderScoreBlocks(gameState.scores.currentScore, 10, true);
 
     // Update current task
     if (gameState.isRunning && gameState.level.challenges.length > 0) {
@@ -933,9 +1163,18 @@ function updateUI() {
         amountPill.className = 'amount-pill';
         amountPill.textContent = score.settings.difficulty;
 
-        // Create the score text
-        const scoreText = document.createElement('span');
-        scoreText.textContent = 'Level ' + levelNumber + ': ' + score.score + ' points';
+        // Create level and score container
+        const levelScoreContainer = document.createElement('div');
+        levelScoreContainer.className = 'level-score-container';
+
+        const levelText = document.createElement('span');
+        levelText.className = 'level-text';
+        levelText.textContent = 'Level ' + levelNumber + ':';
+
+        // Create the score display with blocks
+        const scoreDisplay = document.createElement('div');
+        scoreDisplay.className = 'score-blocks';
+        scoreDisplay.innerHTML = renderScoreBlocks(score.score);
 
         // Create the badges container
         const badgesContainer = document.createElement('div');
@@ -943,7 +1182,10 @@ function updateUI() {
         badgesContainer.appendChild(operationBadge);
         badgesContainer.appendChild(amountPill);
 
-        scoreEl.appendChild(scoreText);
+        levelScoreContainer.appendChild(levelText);
+        levelScoreContainer.appendChild(scoreDisplay);
+
+        scoreEl.appendChild(levelScoreContainer);
         scoreEl.appendChild(badgesContainer);
         previousScoresEl.appendChild(scoreEl);
     });
@@ -1116,8 +1358,16 @@ function clearTimer() {
 }
 
 // Event listeners
+difficultyInput.addEventListener('input', (e) => {
+    const value = Math.max(1, Math.min(9, parseInt(e.target.value) || 1));
+    gameState.settings.difficulty = value;
+    difficultyValueEl.textContent = value;
+});
+
 difficultyInput.addEventListener('change', (e) => {
-    gameState.settings.difficulty = Math.max(1, Math.min(9, parseInt(e.target.value) || 1));
+    const value = Math.max(1, Math.min(9, parseInt(e.target.value) || 1));
+    gameState.settings.difficulty = value;
+    difficultyValueEl.textContent = value;
 });
 
 subtractBtn.addEventListener('click', () => {
@@ -1130,8 +1380,58 @@ addBtn.addEventListener('click', () => {
     updateUI();
 });
 
+flipBtn.addEventListener('click', () => {
+    gameState.settings.operatorRotation = 'flip';
+    updateUI();
+});
+
+stickBtn.addEventListener('click', () => {
+    gameState.settings.operatorRotation = 'stick';
+    updateUI();
+});
+
+staticBtn.addEventListener('click', () => {
+    gameState.settings.difficultyProgression = 'static';
+    updateUI();
+});
+
+stepBtn.addEventListener('click', () => {
+    gameState.settings.difficultyProgression = 'step';
+    updateUI();
+});
+
+progressionStepInput.addEventListener('input', (e) => {
+    const value = Math.max(1, Math.min(9, parseInt(e.target.value) || 1));
+    gameState.settings.progressionStep = value;
+    progressionStepValueEl.textContent = value;
+});
+
+progressionStepInput.addEventListener('change', (e) => {
+    const value = Math.max(1, Math.min(9, parseInt(e.target.value) || 1));
+    gameState.settings.progressionStep = value;
+    progressionStepValueEl.textContent = value;
+});
+
+advancedToggle.addEventListener('click', () => {
+    const isExpanded = advancedSettings.style.display !== 'none';
+    advancedSettings.style.display = isExpanded ? 'none' : 'block';
+    advancedToggle.classList.toggle('expanded');
+    advancedToggle.textContent = isExpanded ? 'Advanced Settings ▼' : 'Advanced Settings ▲';
+});
+
+timeLimitInput.addEventListener('input', (e) => {
+    const value = Math.max(1, Math.min(10, parseFloat(e.target.value) || 5));
+    gameState.settings.timeLimit = value;
+    timeLimitValueEl.textContent = value.toFixed(1);
+    if (!gameState.isRunning) {
+        gameState.currentTimeRemaining = gameState.settings.timeLimit;
+    }
+});
+
 timeLimitInput.addEventListener('change', (e) => {
-    gameState.settings.timeLimit = Math.max(1, Math.min(10, parseFloat(e.target.value) || 5));
+    const value = Math.max(1, Math.min(10, parseFloat(e.target.value) || 5));
+    gameState.settings.timeLimit = value;
+    timeLimitValueEl.textContent = value.toFixed(1);
     if (!gameState.isRunning) {
         gameState.currentTimeRemaining = gameState.settings.timeLimit;
         updateUI();
