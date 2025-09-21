@@ -79,7 +79,7 @@ function getHTML() {
                         min="1"
                         max="10"
                         step="0.5"
-                        value="5"
+                        value="8"
                         class="setting-input"
                     />
                 </div>
@@ -97,10 +97,13 @@ function getHTML() {
         </div>
 
         <div class="game-area">
-            <div id="challenges" class="challenges">
-                <!-- Challenges will be generated here -->
+            <div class="game-panel">
+                <div id="current-task" class="current-task-container">-</div>
+                <div id="challenges" class="challenges">
+                    <!-- Challenges will be generated here -->
+                </div>
             </div>
-            <button id="pause-btn" class="pause-btn">Start Game</button>
+            <button id="start-stop-btn" class="start-stop-btn">Start Game</button>
         </div>
     </main>
 
@@ -150,6 +153,14 @@ body {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
+}
+
+.settings-panel.hidden {
+    display: none;
+}
+
+.scores-section.hidden {
+    display: none;
 }
 
 .setting-group {
@@ -246,6 +257,8 @@ body {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+    max-height: 200px;
+    overflow-y: auto;
 }
 
 .previous-score {
@@ -258,6 +271,78 @@ body {
     font-size: 0.875rem;
 }
 
+.previous-score-badges {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.current-task-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1rem;
+    width: 100%;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.current-task-container.hidden {
+    display: none;
+}
+
+.current-task-left {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.operation-badge {
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.375rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+}
+
+.operation-badge.add {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.operation-badge.subtract {
+    background: #e9d5ff;
+    color: #6b21a8;
+}
+
+.amount-pill {
+    background: white;
+    border: 1px solid #d1d5db;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.seconds-pill {
+    background: #f3f4f6;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    color: #374151;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.seconds-pill .seconds-value {
+    font-weight: 600;
+    color: #1f2937;
+}
+
 .game-area {
     display: flex;
     flex-direction: column;
@@ -266,17 +351,29 @@ body {
     width: 100%;
 }
 
-.challenges {
+.game-panel {
     display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
     background: white;
-    padding: 1.5rem;
     border-radius: 0.5rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
     width: 100%;
     max-width: 600px;
+    overflow: hidden;
+}
+
+.challenges {
+    display: none;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 1.5rem;
+    width: 100%;
+}
+
+.challenges.visible {
+    display: flex;
 }
 
 .challenge {
@@ -336,7 +433,7 @@ body {
     background: white;
 }
 
-.pause-btn {
+.start-stop-btn {
     padding: 0.75rem 2rem;
     background: #3b82f6;
     color: white;
@@ -349,16 +446,16 @@ body {
     box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
 }
 
-.pause-btn:hover {
+.start-stop-btn:hover {
     background: #2563eb;
     box-shadow: 0 6px 8px rgba(59, 130, 246, 0.3);
 }
 
-.pause-btn.paused {
+.start-stop-btn.stopped {
     background: #ef4444;
 }
 
-.pause-btn.paused:hover {
+.start-stop-btn.stopped:hover {
     background: #dc2626;
 }
 
@@ -371,20 +468,168 @@ body {
         gap: 1rem;
     }
 
+    .settings-panel {
+        padding: 1rem;
+    }
+
+    .setting-group {
+        gap: 0.75rem;
+    }
+
+    .operation-buttons {
+        gap: 0.75rem;
+    }
+
+    .operation-btn {
+        min-height: 44px; /* Ensure touch targets are accessible */
+        padding: 0.75rem 1rem;
+    }
+
+    .setting-input {
+        min-height: 44px; /* Ensure touch targets are accessible */
+        font-size: 1rem; /* Prevent zoom on iOS */
+    }
+
+    .scores-section {
+        gap: 0.75rem;
+    }
+
+    .score-item {
+        padding: 0.75rem;
+    }
+
+    .previous-scores {
+        max-height: 150px; /* Smaller max height on mobile */
+        min-height: 200px;
+    }
+
+    .current-task-container {
+        padding: 0.75rem 1rem;
+        margin-bottom: 0.75rem;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .current-task-left {
+        gap: 0.75rem;
+    }
+
     .challenges {
         padding: 1rem;
         gap: 0.25rem;
     }
 
+    .challenges.visible {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        grid-template-rows: repeat(2, auto);
+        justify-items: center;
+    }
+
     .challenge {
-        min-width: 1.75rem;
+        min-width: 2rem; /* Slightly larger for better touch targets */
     }
 
     .challenge-number,
     .challenge-input {
-        width: 1.75rem;
-        height: 1.75rem;
-        font-size: 0.75rem;
+        width: 2rem;
+        height: 2rem;
+        min-width: 2rem;
+        min-height: 2rem;
+        font-size: 1rem; /* Prevent zoom on iOS */
+    }
+
+    .start-stop-btn {
+        padding: 1rem 2rem;
+        min-height: 48px;
+        font-size: 1.1rem;
+    }
+}
+
+/* Extra small screens (phones in portrait) */
+@media (max-width: 480px) {
+    .main {
+        padding: 0.75rem;
+    }
+
+    .settings-panel {
+        padding: 0.75rem;
+    }
+
+    .setting-group {
+        gap: 0.5rem;
+    }
+
+    .setting-desc {
+        font-size: 0.7rem;
+        line-height: 1.3;
+    }
+
+    .operation-buttons {
+        gap: 0.5rem;
+    }
+
+    .operation-btn {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.8rem;
+    }
+
+    .scores-section {
+        gap: 0.5rem;
+    }
+
+    .score-item {
+        padding: 0.5rem;
+        font-size: 0.9rem;
+    }
+
+    .previous-scores {
+        max-height: 120px;
+        min-height: 180px;
+        gap: 0.25rem;
+    }
+
+    .previous-score {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.8rem;
+    }
+
+    .previous-score-badges {
+        gap: 0.25rem;
+    }
+
+    .current-task-container {
+        padding: 0.5rem 0.75rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .challenges {
+        padding: 0.75rem;
+        gap: 0.5rem;
+    }
+
+    .challenges.visible {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        grid-template-rows: repeat(2, auto);
+        justify-items: center;
+    }
+
+    .challenge {
+        min-width: 2.25rem;
+    }
+
+    .challenge-number,
+    .challenge-input {
+        width: 2.25rem;
+        height: 2.25rem;
+        font-size: 1rem; /* Prevent zoom on iOS */
+    }
+
+    .start-stop-btn {
+        padding: 0.875rem 1.5rem;
+        font-size: 1rem;
+        width: 100%;
+        max-width: 300px;
     }
 }
 
@@ -401,6 +646,20 @@ body {
 
     .game-area {
         flex: 1;
+    }
+}
+
+/* Animation for new scores */
+.slide-right {
+    animation: slide-right .2s cubic-bezier(.25,.46,.45,.94) both;
+}
+
+@keyframes slide-right {
+    0% {
+        transform: translateX(-100px);
+    }
+    100% {
+        transform: translateX(0);
     }
 }`;
 }
@@ -419,10 +678,11 @@ let gameState = {
     settings: {
         difficulty: 1,
         operation: 'subtract',
-        timeLimit: 5
+        timeLimit: 8
     },
-    isPaused: true,
-    timer: null
+    isRunning: false,
+    timer: null,
+    currentTimeRemaining: 8
 };
 
 // DOM elements
@@ -431,9 +691,85 @@ const subtractBtn = document.getElementById('subtract-btn');
 const addBtn = document.getElementById('add-btn');
 const timeLimitInput = document.getElementById('timeLimit');
 const currentScoreEl = document.getElementById('current-score');
+const currentTaskEl = document.getElementById('current-task');
 const previousScoresEl = document.getElementById('previous-scores');
 const challengesEl = document.getElementById('challenges');
-const pauseBtn = document.getElementById('pause-btn');
+const startStopBtn = document.getElementById('start-stop-btn');
+
+// Single persistent input for mobile keyboard continuity
+let persistentInput = null;
+let isMobileDevice = false;
+
+// Mobile detection and persistent input management
+function detectMobileDevice() {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+           (window.innerWidth <= 768 && window.innerHeight <= 1024);
+}
+
+function createPersistentInput() {
+    if (persistentInput) return;
+
+    persistentInput = document.createElement('input');
+    persistentInput.type = 'tel';
+    persistentInput.pattern = '[0-9]';
+    persistentInput.maxLength = 1;
+    persistentInput.inputMode = 'numeric';
+    persistentInput.autocomplete = 'off';
+    persistentInput.autocorrect = 'off';
+    persistentInput.autocapitalize = 'off';
+    persistentInput.spellcheck = false;
+    persistentInput.style.position = 'fixed';
+    persistentInput.style.top = '-100px';
+    persistentInput.style.left = '-100px';
+    persistentInput.style.opacity = '0';
+    persistentInput.style.pointerEvents = 'none';
+    persistentInput.style.width = '1px';
+    persistentInput.style.height = '1px';
+
+    persistentInput.addEventListener('input', (e) => {
+        const value = parseInt(e.target.value);
+        if (!isNaN(value) && value >= 0 && value <= 9) {
+            handlePersistentInput(value);
+        }
+        // Clear the input immediately after processing
+        e.target.value = '';
+    });
+
+    persistentInput.addEventListener('blur', () => {
+        // On mobile, if the persistent input loses focus, refocus it after a short delay
+        if (isMobileDevice && gameState.isRunning) {
+            setTimeout(() => {
+                if (persistentInput && gameState.isRunning) {
+                    persistentInput.focus();
+                }
+            }, 100);
+        }
+    });
+
+    document.body.appendChild(persistentInput);
+}
+
+function handlePersistentInput(value) {
+    if (!gameState.isRunning) return;
+
+    const currentIndex = gameState.level.currentChallenge;
+    handleAttempt(currentIndex, value);
+}
+
+function focusPersistentInput() {
+    if (persistentInput && isMobileDevice && gameState.isRunning) {
+        // Use setTimeout to ensure DOM is ready
+        setTimeout(() => {
+            if (persistentInput) {
+                persistentInput.focus();
+                // On iOS, sometimes we need to trigger a click or touch event
+                if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+                    persistentInput.click();
+                }
+            }
+        }, 10);
+    }
+}
 
 // Utility functions
 function generateRandomIntegers() {
@@ -478,24 +814,46 @@ function generateInitialLevel() {
     };
 }
 
-function generateSettings(numCompletedLevels = 0) {
+function generateSettings(numCompletedLevels = 0, currentSettings = null) {
+    const baseTimeLimit = currentSettings ? currentSettings.timeLimit : 8;
     return {
         difficulty: normalizeAnswer(1 + Math.floor(numCompletedLevels / 2)),
         operation: numCompletedLevels % 2 === 0 ? 'subtract' : 'add',
-        timeLimit: Math.max(5 - numCompletedLevels * 0.2, 2)
+        timeLimit: Math.max(baseTimeLimit - numCompletedLevels * 0.2, 2)
     };
 }
 
 // Game logic
 function initializeGame() {
+    isMobileDevice = detectMobileDevice();
+    if (isMobileDevice) {
+        createPersistentInput();
+    }
+
     gameState.level = generateInitialLevel();
     gameState.scores.currentScore = 0;
     gameState.scores.previousScores = [];
-    gameState.isPaused = true;
+    gameState.isRunning = false;
+    gameState.currentTimeRemaining = gameState.settings.timeLimit;
     updateUI();
 }
 
 function updateUI() {
+    // Update settings panel visibility
+    const settingsPanel = document.querySelector('.settings-panel');
+    settingsPanel.classList.toggle('hidden', gameState.isRunning);
+
+    // Update scores section visibility
+    const scoresSection = document.querySelector('.scores-section');
+    scoresSection.classList.toggle('hidden', !gameState.isRunning);
+
+    // Update current task visibility
+    const currentTaskContainer = document.querySelector('.current-task-container');
+    currentTaskContainer.classList.toggle('hidden', !gameState.isRunning);
+
+    // Update challenges visibility
+    challengesEl.classList.toggle('visible', gameState.isRunning);
+
     // Update settings
     difficultyInput.value = gameState.settings.difficulty;
     timeLimitInput.value = gameState.settings.timeLimit;
@@ -507,15 +865,86 @@ function updateUI() {
     // Update scores
     currentScoreEl.textContent = gameState.scores.currentScore;
 
+    // Update current task
+    if (gameState.isRunning && gameState.level.challenges.length > 0) {
+        const operation = gameState.settings.operation;
+        const difficulty = gameState.settings.difficulty;
+        const timeLimit = gameState.settings.timeLimit;
+
+        // Clear existing content
+        currentTaskEl.innerHTML = '';
+
+        // Create left side container
+        const leftContainer = document.createElement('div');
+        leftContainer.className = 'current-task-left';
+
+        // Create operation badge
+        const operationBadge = document.createElement('span');
+        operationBadge.className = 'operation-badge ' + operation;
+        operationBadge.textContent = operation;
+
+        // Create amount pill
+        const amountPill = document.createElement('span');
+        amountPill.className = 'amount-pill';
+        amountPill.textContent = difficulty;
+
+        // Create seconds pill for right side
+        const secondsPill = document.createElement('span');
+        secondsPill.className = 'seconds-pill';
+
+        const secondsValue = document.createElement('span');
+        secondsValue.className = 'seconds-value';
+        secondsValue.textContent = timeLimit.toFixed(1);
+
+        const secondsText = document.createTextNode(' seconds');
+
+        secondsPill.appendChild(secondsValue);
+        secondsPill.appendChild(secondsText);
+
+        // Append elements to left container
+        leftContainer.appendChild(operationBadge);
+        leftContainer.appendChild(amountPill);
+
+        // Append containers to main container
+        currentTaskEl.appendChild(leftContainer);
+        currentTaskEl.appendChild(secondsPill);
+    } else {
+        currentTaskEl.textContent = '';
+    }
+
     // Update previous scores
     previousScoresEl.innerHTML = '';
     gameState.scores.previousScores.forEach((score, index) => {
+        const levelNumber = gameState.scores.previousScores.length - index;
         const scoreEl = document.createElement('div');
         scoreEl.className = 'previous-score';
-        scoreEl.innerHTML = \`
-            <span>Level \${index + 1}: \${score.score} points</span>
-            <span>\${score.settings.operation} \${score.settings.difficulty}</span>
-        \`;
+        if (score.isNew) {
+            scoreEl.classList.add('slide-right');
+            score.isNew = false; // Remove the flag so it only animates once
+        }
+
+        // Create operation badge
+        const operationBadge = document.createElement('span');
+        operationBadge.className = 'operation-badge ' + score.settings.operation;
+        operationBadge.textContent = score.settings.operation;
+
+        // Create amount pill
+        const amountPill = document.createElement('span');
+        amountPill.className = 'amount-pill';
+        amountPill.textContent = score.settings.difficulty;
+
+        // Create the score text
+        const scoreText = document.createElement('span');
+        scoreText.textContent = 'Level ' + levelNumber + ': ' + score.score + ' points';
+
+        // Create the badges container
+        const badgesContainer = document.createElement('div');
+        badgesContainer.className = 'previous-score-badges';
+        badgesContainer.appendChild(operationBadge);
+        badgesContainer.appendChild(amountPill);
+
+        scoreEl.appendChild(scoreText);
+        scoreEl.appendChild(badgesContainer);
         previousScoresEl.appendChild(scoreEl);
     });
 
@@ -530,18 +959,24 @@ function updateUI() {
         numberEl.textContent = challenge.test;
 
         const inputEl = document.createElement('input');
-        inputEl.className = \`challenge-input \${challenge.correct === true ? 'correct' : ''} \${challenge.correct === false ? 'incorrect' : ''} \${index === gameState.level.currentChallenge && !gameState.isPaused ? 'current' : ''}\`;
+        inputEl.className = \`challenge-input \${challenge.correct === true ? 'correct' : ''} \${challenge.correct === false ? 'incorrect' : ''} \${index === gameState.level.currentChallenge && gameState.isRunning ? 'current' : ''}\`;
         inputEl.type = 'tel';
         inputEl.pattern = '[0-9]';
         inputEl.maxLength = 1;
         inputEl.inputMode = 'numeric';
+        inputEl.autocomplete = 'off';
+        inputEl.autocorrect = 'off';
+        inputEl.autocapitalize = 'off';
+        inputEl.spellcheck = false;
 
         if (challenge.correct !== undefined) {
-            inputEl.value = challenge.attempt;
+            inputEl.value = challenge.correct === false ? '[X]' : challenge.attempt;
             inputEl.disabled = true;
-        } else if (index === gameState.level.currentChallenge && !gameState.isPaused) {
+        } else if (index === gameState.level.currentChallenge && gameState.isRunning) {
             inputEl.disabled = false;
-            setTimeout(() => inputEl.focus(), 0);
+            if (!isMobileDevice) {
+                setTimeout(() => inputEl.focus(), 0);
+            }
         } else {
             inputEl.disabled = true;
         }
@@ -554,9 +989,9 @@ function updateUI() {
         challengesEl.appendChild(challengeEl);
     });
 
-    // Update pause button
-    pauseBtn.textContent = gameState.isPaused ? 'Start Game' : 'Pause Game';
-    pauseBtn.classList.toggle('paused', !gameState.isPaused);
+    // Update start/stop button
+    startStopBtn.textContent = gameState.isRunning ? 'Stop Game' : 'Start Game';
+    startStopBtn.classList.toggle('stopped', gameState.isRunning);
 }
 
 function handleAttempt(index, attempt) {
@@ -580,25 +1015,42 @@ function handleAttempt(index, attempt) {
 
     // Check if level is complete
     if (nextIndex === 0) {
-        gameState.scores.previousScores.push({
+        gameState.scores.previousScores.unshift({
             score: gameState.scores.currentScore,
-            settings: { ...gameState.settings }
+            settings: { ...gameState.settings },
+            isNew: true
         });
         gameState.scores.currentScore = 0;
         gameState.level = generateInitialLevel();
-        gameState.settings = generateSettings(gameState.scores.previousScores.length);
+        gameState.settings = generateSettings(gameState.scores.previousScores.length, gameState.settings);
+    }
+
+    // Restart timer for the next challenge if game is running
+    if (gameState.isRunning) {
+        startTimer();
     }
 
     updateUI();
+
+    // Ensure persistent input stays focused on mobile after handling attempt
+    if (isMobileDevice && gameState.isRunning) {
+        focusPersistentInput();
+    }
 }
 
-function togglePause() {
-    gameState.isPaused = !gameState.isPaused;
-
-    if (!gameState.isPaused) {
+function toggleStartStop() {
+    if (!gameState.isRunning) {
+        // Start the game
+        gameState.isRunning = true;
         startTimer();
+        // Focus the persistent input on mobile when game starts
+        if (isMobileDevice) {
+            focusPersistentInput();
+        }
     } else {
-        clearTimer();
+        // Stop the game - reload the page
+        window.location.reload();
+        return;
     }
 
     updateUI();
@@ -606,40 +1058,54 @@ function togglePause() {
 
 function startTimer() {
     clearTimer();
-    gameState.timer = setTimeout(() => {
-        const challenge = gameState.level.challenges[gameState.level.currentChallenge];
-        const correctAnswer = correctAnswerIs(
-            challenge.test,
-            gameState.settings.difficulty,
-            gameState.settings.operation
-        );
+    gameState.currentTimeRemaining = gameState.settings.timeLimit;
+    gameState.timer = setInterval(() => {
+        gameState.currentTimeRemaining -= 0.5;
+        if (gameState.currentTimeRemaining <= 0) {
+            // Time's up - mark as incorrect
+            const challenge = gameState.level.challenges[gameState.level.currentChallenge];
+            const correctAnswer = correctAnswerIs(
+                challenge.test,
+                gameState.settings.difficulty,
+                gameState.settings.operation
+            );
 
-        gameState.level.challenges[gameState.level.currentChallenge].correct = false;
-        gameState.level.challenges[gameState.level.currentChallenge].correctAnswer = correctAnswer;
+            gameState.level.challenges[gameState.level.currentChallenge].correct = false;
+            gameState.level.challenges[gameState.level.currentChallenge].correctAnswer = correctAnswer;
 
-        const nextIndex = (gameState.level.currentChallenge + 1) % 10;
-        gameState.level.currentChallenge = nextIndex;
+            const nextIndex = (gameState.level.currentChallenge + 1) % 10;
+            gameState.level.currentChallenge = nextIndex;
 
-        if (nextIndex === 0) {
-            gameState.scores.previousScores.push({
-                score: gameState.scores.currentScore,
-                settings: { ...gameState.settings }
-            });
-            gameState.scores.currentScore = 0;
-            gameState.level = generateInitialLevel();
-            gameState.settings = generateSettings(gameState.scores.previousScores.length);
+            if (nextIndex === 0) {
+                gameState.scores.previousScores.unshift({
+                    score: gameState.scores.currentScore,
+                    settings: { ...gameState.settings },
+                    isNew: true
+                });
+                gameState.scores.currentScore = 0;
+                gameState.level = generateInitialLevel();
+                gameState.settings = generateSettings(gameState.scores.previousScores.length);
+            }
+
+            clearTimer();
+            if (gameState.isRunning) {
+                startTimer();
+            }
         }
-
-        updateUI();
-        if (!gameState.isPaused) {
-            startTimer();
+        // Only update UI when timer expires, not every tick
+        if (gameState.currentTimeRemaining <= 0) {
+            updateUI();
+            // Ensure persistent input stays focused on mobile after timer expires
+            if (isMobileDevice && gameState.isRunning) {
+                focusPersistentInput();
+            }
         }
-    }, gameState.settings.timeLimit * 1000);
+    }, 500);
 }
 
 function clearTimer() {
     if (gameState.timer) {
-        clearTimeout(gameState.timer);
+        clearInterval(gameState.timer);
         gameState.timer = null;
     }
 }
@@ -661,9 +1127,13 @@ addBtn.addEventListener('click', () => {
 
 timeLimitInput.addEventListener('change', (e) => {
     gameState.settings.timeLimit = Math.max(1, Math.min(10, parseFloat(e.target.value) || 5));
+    if (!gameState.isRunning) {
+        gameState.currentTimeRemaining = gameState.settings.timeLimit;
+        updateUI();
+    }
 });
 
-pauseBtn.addEventListener('click', togglePause);
+startStopBtn.addEventListener('click', toggleStartStop);
 
 // Initialize the game
 initializeGame();`;

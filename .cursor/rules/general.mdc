@@ -1,0 +1,17 @@
+---
+alwaysApply: true
+---
+
+# Cursor Rules for Warmup Worker Project
+
+## Development Server Management
+- NEVER run "npm run dev" or any server startup commands yourself
+- ALWAYS assume the development server is already running at http://localhost:8787
+- When changes are made that would benefit from testing, tell the user to try it out in their browser
+- If any change requires a hard restart of the server, inform the user they need to restart it manually
+- NEVER attempt to kill, restart, or manage the development server yourself unless explicitly told to do so
+
+## Testing Changes
+- After making code changes, suggest the user tests them by visiting the running application
+- Use curl or similar tools only to verify the server is responding, not to start it
+- Focus on explaining what the changes do rather than running the server
