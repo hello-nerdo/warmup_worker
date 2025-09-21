@@ -150,6 +150,53 @@ To use a custom domain:
 - Focus on the operation pattern rather than individual calculations
 - The game gets progressively faster and more challenging
 
+## Testing
+
+This project uses [Playwright](https://playwright.dev/) for end-to-end testing to ensure the math game works correctly across different browsers and devices.
+
+### Test Setup
+
+1. **Install Playwright browsers** (one-time setup):
+   ```bash
+   npm run test:install
+   ```
+
+2. **Run tests**:
+   ```bash
+   npm test
+   ```
+
+3. **Run tests with browser UI** (for debugging):
+   ```bash
+   npm run test:headed
+   ```
+
+### Test Configuration
+
+- **Test Directory**: `tests/` - All test files are stored here
+- **Configuration**: `playwright.config.js` - Test settings and browser configurations
+- **Automatic Server**: Tests automatically start the local dev server (`npm run dev`)
+- **Multi-Browser**: Tests run on Chromium, Firefox, WebKit, and mobile viewports
+
+### Test Coverage
+
+The test suite covers:
+- Game interface loading and initial state
+- Game start/stop functionality
+- Correct and incorrect answer handling
+- Level completion and progression
+- Score tracking and display
+- Mobile responsiveness
+- Settings panel behavior
+
+### Deployment Safety
+
+**Tests are completely excluded from deployment:**
+- Test files (`tests/` directory) are not included in `wrangler.toml`
+- Playwright is a dev dependency (`devDependencies` in `package.json`)
+- Test artifacts are ignored in `.gitignore` (`test-results/`, `playwright-report/`)
+- Only `src/index.js` gets deployed to Cloudflare Workers
+
 ## Development Notes
 
 ### Architecture

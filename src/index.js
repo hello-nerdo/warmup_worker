@@ -997,6 +997,9 @@ function updateUI() {
 function handleAttempt(index, attempt) {
     if (isNaN(attempt) || attempt < 0 || attempt > 9) return;
 
+    // Only accept input for the current active challenge
+    if (index !== gameState.level.currentChallenge) return;
+
     const [valid, correctAnswer] = validateAnswer(
         gameState.level.challenges[index].test,
         attempt,
@@ -1060,7 +1063,7 @@ function startTimer() {
     clearTimer();
     gameState.currentTimeRemaining = gameState.settings.timeLimit;
     gameState.timer = setInterval(() => {
-        gameState.currentTimeRemaining -= 0.5;
+        gameState.currentTimeRemaining -= 0.2;
         if (gameState.currentTimeRemaining <= 0) {
             // Time's up - mark as incorrect
             const challenge = gameState.level.challenges[gameState.level.currentChallenge];
@@ -1100,7 +1103,7 @@ function startTimer() {
                 focusPersistentInput();
             }
         }
-    }, 500);
+    }, 200);
 }
 
 function clearTimer() {
